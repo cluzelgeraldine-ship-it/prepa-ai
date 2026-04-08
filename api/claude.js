@@ -1,170 +1,53 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prépa IA - Plateforme CRFPA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg: #f3f4f6;
-            --white: #ffffff;
-            --text: #1f2937;
-        }
+export const config = {
+  runtime: 'edge',
+};
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+export default async function handler(req) {
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Méthode non autorisée' }), { status: 405 });
+  }
 
-        /* Barre de navigation */
-        nav {
-            width: 100%;
-            background: var(--white);
-            padding: 15px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-sizing: border-box;
-            border-bottom: 1px solid #e5e7eb;
-        }
+  try {
+    const { message } = await req.json();
+    const apiKey = process.env.ANTHROPIC_API_KEY;
 
-        .logo { font-weight: 800; font-size: 1.5rem; color: var(--primary); }
+    if (!apiKey) {
+      return new Response(JSON.stringify({ reply: "⚠️ Configuration : La clé API est manquante dans Vercel." }), { status: 200 });
+    }
 
-        /* Hero Section */
-        header {
-            text-align: center;
-            padding: 80px 20px 40px;
-            max-width: 900px;
-        }
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 1024,
+        messages: [
+          { 
+            role: "user", 
+            content: "Tu es un jury d'examen bienveillant mais exigeant pour le Grand Oral du CRFPA. Analyse la réponse suivante et pose une question pertinente pour tester le candidat : " + message 
+          }
+        ],
+      }),
+    });
 
-        h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
-        .subtitle { font-size: 1.25rem; color: #4b5563; margin-bottom: 30px; }
+    const data = await response.json();
 
-        /* Boutons */
-        .cta-group { display: flex; gap: 15px; justify-content: center; }
-        .btn {
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            border: none;
-            font-size: 1rem;
-        }
-        .btn-blue { background: var(--primary); color: white; }
-        .btn-blue:hover { background: var(--primary-hover); transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+    // Gestion des erreurs d'Anthropic (ex: crédit en attente)
+    if (data.error) {
+      return new Response(JSON.stringify({ reply: "Note du jury : " + data.error.message }), { status: 200 });
+    }
 
-        /* Chat Container */
-        .chat-box {
-            width: 90%;
-            max-width: 700px;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            margin-top: 40px;
-            overflow: hidden;
-            border: 1px solid #e5e7eb;
-        }
+    // Réponse réussie
+    return new Response(JSON.stringify({ reply: data.content[0].text }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
 
-        #chat { height: 350px; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { padding: 12px 18px; border-radius: 15px; max-width: 80%; font-size: 0.95rem; line-height: 1.4; }
-        .msg.ia { background: #f3f4f6; align-self: flex-start; }
-        .msg.user { background: var(--primary); color: white; align-self: flex-end; }
-
-        /* Zone Saisie */
-        .input-area { padding: 20px; border-top: 1px solid #e5e7eb; display: flex; gap: 10px; }
-        input { flex: 1; border: 1px solid #d1d5db; padding: 12px; border-radius: 8px; outline: none; }
-
-        /* MODALE D'INSCRIPTION */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center; align-items: center;
-        }
-        .modal-content {
-            background: white; padding: 40px; border-radius: 20px; width: 400px; text-align: center;
-        }
-        .modal-content input { width: 100%; margin-bottom: 15px; box-sizing: border-box; }
-    </style>
-</head>
-<body>
-
-    <nav>
-        <div class="logo">Prépa IA</div>
-        <button class="btn btn-outline" onclick="openModal()">Connexion</button>
-    </nav>
-
-    <header>
-        <h1>L'entraînement ultime pour votre Grand Oral.</h1>
-        <p class="subtitle">Rejoignez les étudiants de Paris 2 et de toute la France pour simuler vos entretiens avec une IA de haut niveau.</p>
-        <div class="cta-group">
-            <button class="btn btn-blue" onclick="openModal()">S'inscrire gratuitement</button>
-            <button class="btn btn-outline">Découvrir la méthode</button>
-        </div>
-    </header>
-
-    <div class="chat-box">
-        <div id="chat">
-            <div class="msg ia">Bonjour ! Je suis votre jury virtuel. Pour commencer, décrivez-moi brièvement votre parcours ou votre sujet d'exposé.</div>
-        </div>
-        <div class="input-area">
-            <input type="text" id="userInput" placeholder="Posez votre question ici...">
-            <button class="btn btn-blue" onclick="sendMessage()">Envoyer</button>
-        </div>
-    </div>
-
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <h2>Créer un compte</h2>
-            <p>Accédez à vos simulations sauvegardées.</p>
-            <input type="text" placeholder="Nom complet">
-            <input type="email" placeholder="Adresse email universitaire">
-            <input type="password" placeholder="Mot de passe">
-            <button class="btn btn-blue" style="width:100%" onclick="closeModal()">Finaliser l'inscription</button>
-            <p style="font-size: 0.8rem; margin-top: 15px; color: gray;" onclick="closeModal()">Fermer</p>
-        </div>
-    </div>
-
-    <script>
-        // Fonctions pour la modale
-        function openModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('authModal').style.display = 'none'; }
-
-        async function sendMessage() {
-            const input = document.getElementById('userInput');
-            const chat = document.getElementById('chat');
-            if (!input.value) return;
-
-            const userMsg = input.value;
-            chat.innerHTML += `<div class="msg user">${userMsg}</div>`;
-            input.value = '';
-            chat.scrollTop = chat.scrollHeight;
-
-            try {
-                const response = await fetch('/api/claude', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userMsg })
-                });
-                const data = await response.json();
-                chat.innerHTML += `<div class="msg ia">${data.reply}</div>`;
-                chat.scrollTop = chat.scrollHeight;
-            } catch (e) {
-                chat.innerHTML += `<div class="msg ia">⚠️ Connexion en cours de validation... Réessayez demain matin !</div>`;
-            }
-        }
-    </script>
-</body>
-</html>
+  } catch (error) {
+    return new Response(JSON.stringify({ reply: "Erreur technique : " + error.message }), { status: 200 });
+  }
+}
