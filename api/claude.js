@@ -11,11 +11,12 @@ export default async function handler(req) {
     const { message, context } = await req.json();
     const apiKey = process.env.ANTHROPIC_API_KEY;
 
+    // 1. Vérifie si la clé est présente
     if (!apiKey) {
-      return new Response(JSON.stringify({ reply: "⚠️ Clé API introuvable dans Vercel." }), { status: 200 });
+      return new Response(JSON.stringify({ reply: "⚠️ Erreur : La clé ANTHROPIC_API_KEY est introuvable dans Vercel." }), { status: 200 });
     }
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'x-api-key': apiKey,
@@ -25,22 +26,25 @@ export default async function handler(req) {
       body: JSON.stringify({
         model: "claude-3-haiku-20240307",
         max_tokens: 512,
-        messages: [{ role: "user", content: `Parcours: ${context}\n\nRéponse: ${message}` }],
+        messages: [{ role: "user", content: `Contexte: ${context}\n\nQuestion: ${message}` }],
       }),
     });
 
-    const data = await res.json(); // Correction ici : 'res' au lieu de 'response'
+    const data = await response.json();
 
+    // 2. Vérifie si Anthropic renvoie une erreur (ex: pas de crédits)
     if (data.error) {
       return new Response(JSON.stringify({ reply: "Anthropic dit : " + data.error.message }), { status: 200 });
     }
 
+    // 3. Succès
     return new Response(JSON.stringify({ reply: data.content[0].text }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
 
   } catch (err) {
+    // 4. Capture toute autre erreur technique
     return new Response(JSON.stringify({ reply: "Erreur technique : " + err.message }), { status: 200 });
   }
 }
