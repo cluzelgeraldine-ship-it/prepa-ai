@@ -12,7 +12,7 @@ export default async function handler(req) {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: "claude-3-5-sonnet-20240620",
+        model: "claude-2.1",
         max_tokens: 1024,
         messages: [{ role: "user", content: `Parcours candidat : ${context}\n\nQuestion : ${message}` }]
       }),
@@ -24,10 +24,9 @@ export default async function handler(req) {
       return new Response(JSON.stringify({ reply: data.content[0].text }), { status: 200 });
     }
 
-    // Affiche l'erreur en clair si ça échoue
-    return new Response(JSON.stringify({ reply: "Message d'Anthropic : " + (data.error ? data.error.message : "Erreur inconnue") }), { status: 200 });
+    return new Response(JSON.stringify({ reply: "Note du serveur : " + (data.error ? data.error.message : "Vérification en cours") }), { status: 200 });
     
   } catch (err) {
-    return new Response(JSON.stringify({ reply: "Bug technique : " + err.message }), { status: 200 });
+    return new Response(JSON.stringify({ reply: "Erreur technique : " + err.message }), { status: 200 });
   }
 }
