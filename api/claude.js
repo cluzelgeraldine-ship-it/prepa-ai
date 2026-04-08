@@ -14,33 +14,21 @@ export default async function handler(req) {
       body: JSON.stringify({
         model: "claude-3-haiku-20240307",
         max_tokens: 1024,
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: `Contexte candidat : ${context}\n\nQuestion posée : ${message}`
-              }
-            ]
-          }
-        ],
+        messages: [{ role: "user", content: `Parcours : ${context}\n\nRéponse : ${message}` }]
       }),
     });
 
     const data = await response.json();
 
-    // Si Anthropic renvoie une erreur
-    if (data.error) {
-      return new Response(JSON.stringify({ reply: "Détail technique : " + JSON.stringify(data.error.message || data.error) }), { status: 200 });
+    // Si c'est un succès, data.content[0].text existe
+    if (data && data.content && data.content[0]) {
+      return new Response(JSON.stringify({ reply: data.content[0].text }), { status: 200 });
     }
 
-    // Extraction précise du texte
-    const finalReply = data.content[0].text;
-    
-    return new Response(JSON.stringify({ reply: finalReply }), { status: 200 });
+    // Si c'est une erreur, on affiche TOUT ce que Claude renvoie pour comprendre
+    return new Response(JSON.stringify({ reply: "Réponse brute : " + JSON.stringify(data) }), { status: 200 });
     
   } catch (err) {
-    return new Response(JSON.stringify({ reply: "Bug technique : " + err.message }), { status: 200 });
+    return new Response(JSON.stringify({ reply: "Erreur critique : " + err.message }), { status: 200 });
   }
 }
