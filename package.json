@@ -1,8 +1,7 @@
 {
-  "name": "prepai-api",
+  "name": "prepa-ai",
   "version": "1.0.0",
-  "main": "api/claude.js",
   "dependencies": {
-    "node-fetch": "^3.3.0"
+    "@anthropic-ai/sdk": "^0.18.0"
   }
 }
