@@ -13,18 +13,21 @@ export default async function handler(req) {
       body: JSON.stringify({
         model: "claude-3-haiku-20240307",
         max_tokens: 1024,
-        messages: [{ role: "user", content: `Tu es un jury d'examen. Voici le parcours : ${context}. Réponds à : ${message}` }],
+        messages: [{ role: "user", content: `Parcours: ${context}\n\nQuestion: ${message}` }],
       }),
     });
 
     const data = await response.json();
 
     if (data.error) {
-      return new Response(JSON.stringify({ reply: "⚠️ Problème : " + data.error.message }), { status: 200 });
+      return new Response(JSON.stringify({ reply: "Détail : " + data.error.message }), { status: 200 });
     }
 
-    return new Response(JSON.stringify({ reply: data.content[0].text }), { status: 200 });
+    // LA CORRECTION EST ICI : on va chercher data.content[0].text
+    const text = data.content && data.content[0] ? data.content[0].text : "Pas de réponse";
+    
+    return new Response(JSON.stringify({ reply: text }), { status: 200 });
   } catch (err) {
-    return new Response(JSON.stringify({ reply: "❌ Erreur technique : " + err.message }), { status: 200 });
+    return new Response(JSON.stringify({ reply: "Erreur : " + err.message }), { status: 200 });
   }
 }
