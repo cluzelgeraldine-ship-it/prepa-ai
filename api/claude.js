@@ -3,6 +3,7 @@ export const config = { runtime: 'edge' };
 export default async function handler(req) {
   try {
     const { message, context } = await req.json();
+    
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -13,21 +14,33 @@ export default async function handler(req) {
       body: JSON.stringify({
         model: "claude-3-haiku-20240307",
         max_tokens: 1024,
-        messages: [{ role: "user", content: `Parcours: ${context}\n\nQuestion: ${message}` }],
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: `Contexte candidat : ${context}\n\nQuestion posée : ${message}`
+              }
+            ]
+          }
+        ],
       }),
     });
 
     const data = await response.json();
 
+    // Si Anthropic renvoie une erreur
     if (data.error) {
-      return new Response(JSON.stringify({ reply: "Détail : " + data.error.message }), { status: 200 });
+      return new Response(JSON.stringify({ reply: "Détail technique : " + JSON.stringify(data.error.message || data.error) }), { status: 200 });
     }
 
-    // LA CORRECTION EST ICI : on va chercher data.content[0].text
-    const text = data.content && data.content[0] ? data.content[0].text : "Pas de réponse";
+    // Extraction précise du texte
+    const finalReply = data.content[0].text;
     
-    return new Response(JSON.stringify({ reply: text }), { status: 200 });
+    return new Response(JSON.stringify({ reply: finalReply }), { status: 200 });
+    
   } catch (err) {
-    return new Response(JSON.stringify({ reply: "Erreur : " + err.message }), { status: 200 });
+    return new Response(JSON.stringify({ reply: "Bug technique : " + err.message }), { status: 200 });
   }
 }
