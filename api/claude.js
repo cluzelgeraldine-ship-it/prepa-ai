@@ -4,16 +4,15 @@ export const config = {
 
 export default async function handler(req) {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Interdit' }), { status: 405 });
+    return new Response(JSON.stringify({ error: 'Méthode non autorisée' }), { status: 405 });
   }
 
   try {
     const { message, context } = await req.json();
     const apiKey = process.env.ANTHROPIC_API_KEY;
 
-    // 1. Test de la présence de la clé
     if (!apiKey) {
-      return new Response(JSON.stringify({ reply: "⚠️ La clé ANTHROPIC_API_KEY est introuvable sur Vercel." }), { status: 200 });
+      return new Response(JSON.stringify({ reply: "⚠️ Erreur : La clé API est manquante dans Vercel." }), { status: 200 });
     }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -24,27 +23,31 @@ export default async function handler(req) {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: "claude-3-haiku-20240307",
-        max_tokens: 512,
-        messages: [{ role: "user", content: `Parcours: ${context}\n\nRéponse: ${message}` }],
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 1024,
+        messages: [
+          { 
+            role: "user", 
+            content: `Tu es un jury d'examen. Voici le parcours du candidat : ${context}. Analyse sa réponse et pose une question suivante : ${message}` 
+          }
+        ],
       }),
     });
 
     const data = await response.json();
 
-    // 2. Test des erreurs renvoyées par Anthropic (ex: solde insuffisant)
+    // Si Anthropic renvoie une erreur (crédits, clé, etc.)
     if (data.error) {
-      return new Response(JSON.stringify({ reply: "Anthropic dit : " + data.error.message }), { status: 200 });
+      return new Response(JSON.stringify({ reply: "L'IA dit : " + data.error.message }), { status: 200 });
     }
 
-    // 3. Succès : l'IA répond
+    // Réponse de Claude
     return new Response(JSON.stringify({ reply: data.content[0].text }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
 
-  } catch (err) {
-    // 4. Test des erreurs techniques de réseau
-    return new Response(JSON.stringify({ reply: "Erreur technique : " + err.message }), { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify({ reply: "Erreur technique : " + error.message }), { status: 200 });
   }
 }
