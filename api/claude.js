@@ -12,7 +12,7 @@ export default async function handler(req) {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: "claude-3-haiku-20240307",
+        model: "claude-3-haiku-20240307", // Le nom est correct, mais tentons la version sans date si besoin
         max_tokens: 1024,
         messages: [{ role: "user", content: `Parcours : ${context}\n\nRéponse : ${message}` }]
       }),
@@ -20,15 +20,13 @@ export default async function handler(req) {
 
     const data = await response.json();
 
-    // Si c'est un succès, data.content[0].text existe
-    if (data && data.content && data.content[0]) {
+    if (data.content && data.content[0]) {
       return new Response(JSON.stringify({ reply: data.content[0].text }), { status: 200 });
     }
 
-    // Si c'est une erreur, on affiche TOUT ce que Claude renvoie pour comprendre
-    return new Response(JSON.stringify({ reply: "Réponse brute : " + JSON.stringify(data) }), { status: 200 });
+    return new Response(JSON.stringify({ reply: "Erreur Anthropic : " + (data.error ? data.error.message : JSON.stringify(data)) }), { status: 200 });
     
   } catch (err) {
-    return new Response(JSON.stringify({ reply: "Erreur critique : " + err.message }), { status: 200 });
+    return new Response(JSON.stringify({ reply: "Erreur technique : " + err.message }), { status: 200 });
   }
 }
