@@ -11,9 +11,8 @@ export default async function handler(req) {
     const { message, context } = await req.json();
     const apiKey = process.env.ANTHROPIC_API_KEY;
 
-    // Si la clé est absente, on le dit gentiment dans le chat au lieu de planter
     if (!apiKey) {
-      return new Response(JSON.stringify({ reply: "⚠️ La clé ANTHROPIC_API_KEY n'est pas détectée dans vos paramètres Vercel." }), { status: 200 });
+      return new Response(JSON.stringify({ reply: "⚠️ Clé API introuvable dans Vercel." }), { status: 200 });
     }
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -30,7 +29,7 @@ export default async function handler(req) {
       }),
     });
 
-    const data = await response.json();
+    const data = await res.json(); // Correction ici : 'res' au lieu de 'response'
 
     if (data.error) {
       return new Response(JSON.stringify({ reply: "Anthropic dit : " + data.error.message }), { status: 200 });
@@ -42,7 +41,6 @@ export default async function handler(req) {
     });
 
   } catch (err) {
-    // On renvoie l'erreur sous forme de message pour comprendre le blocage
     return new Response(JSON.stringify({ reply: "Erreur technique : " + err.message }), { status: 200 });
   }
 }
