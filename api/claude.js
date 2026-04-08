@@ -11,11 +11,12 @@ export default async function handler(req) {
     const { message, context } = await req.json();
     const apiKey = process.env.ANTHROPIC_API_KEY;
 
+    // 1. Diagnostic de la clé
     if (!apiKey) {
-      return new Response(JSON.stringify({ reply: "⚠️ Clé API introuvable dans Vercel." }), { status: 200 });
+      return new Response(JSON.stringify({ reply: "⚠️ Clé ANTHROPIC_API_KEY introuvable sur Vercel." }), { status: 200 });
     }
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'x-api-key': apiKey,
@@ -29,18 +30,21 @@ export default async function handler(req) {
       }),
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
+    // 2. Diagnostic d'Anthropic (ex: plus de crédit)
     if (data.error) {
       return new Response(JSON.stringify({ reply: "Anthropic dit : " + data.error.message }), { status: 200 });
     }
 
+    // 3. Succès
     return new Response(JSON.stringify({ reply: data.content[0].text }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
 
   } catch (err) {
+    // 4. Diagnostic technique global
     return new Response(JSON.stringify({ reply: "Erreur technique : " + err.message }), { status: 200 });
   }
 }
