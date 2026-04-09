@@ -133,12 +133,11 @@
             <input type="email" placeholder="Adresse email universitaire">
             <input type="password" placeholder="Mot de passe">
             <button class="btn btn-blue" style="width:100%" onclick="closeModal()">Finaliser l'inscription</button>
-            <p style="font-size: 0.8rem; margin-top: 15px; color: gray;" onclick="closeModal()">Fermer</p>
+            <p style="font-size: 0.8rem; margin-top: 15px; color: gray; cursor:pointer;" onclick="closeModal()">Fermer</p>
         </div>
     </div>
 
     <script>
-        // Fonctions pour la modale
         function openModal() { document.getElementById('authModal').style.display = 'flex'; }
         function closeModal() { document.getElementById('authModal').style.display = 'none'; }
 
@@ -156,15 +155,32 @@
                 const response = await fetch('/api/claude', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userMsg })
+                    body: JSON.stringify({ 
+                        message: userMsg,
+                        mode: "CONCOURS", // Important pour ton handler Edge
+                        context: "Candidat au Grand Oral - Paris 2" // Contexte par défaut
+                    })
                 });
+                
                 const data = await response.json();
-                chat.innerHTML += `<div class="msg ia">${data.reply}</div>`;
+                
+                // Si l'API renvoie un message, on l'affiche, sinon on affiche l'erreur propre
+                const reply = data.reply || "⚠️ Le jury réfléchit... Réessayez dans un instant.";
+                chat.innerHTML += `<div class="msg ia">${reply}</div>`;
                 chat.scrollTop = chat.scrollHeight;
+
             } catch (e) {
-                chat.innerHTML += `<div class="msg ia">⚠️ Connexion en cours de validation... Réessayez demain matin !</div>`;
+                console.error("Erreur Fetch:", e);
+                chat.innerHTML += `<div class="msg ia">⚠️ Connexion interrompue. Vérifiez que votre serveur Vercel est bien en ligne.</div>`;
             }
         }
+
+        // Permet d'envoyer le message avec la touche "Entrée"
+        document.getElementById('userInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
     </script>
 </body>
 </html>
