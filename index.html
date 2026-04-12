@@ -1,289 +1,203 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prépa IA · Grand Oral</title>
-<style>
- @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prépa IA · Grand Oral & Entretien Pro</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --ink: #1a1510;
-    --parchment: #f5f0e8;
-    --gold: #c9a84c;
-    --gold-light: #e8d5a0;
-    --rouge: #8b2020;
-    --cream: #faf7f2;
-    --muted: #7a6f62;
-    --border: rgba(201,168,76,0.3);
-    --success: #2d6a2d;
-  }
+    :root {
+      --ink: #1a1510;
+      --parchment: #f5f0e8;
+      --gold: #c9a84c;
+      --gold-light: #e8d5a0;
+      --rouge: #8b2020;
+      --cream: #faf7f2;
+      --muted: #7a6f62;
+      --border: rgba(201,168,76,0.3);
+    }
 
-  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
 
-  /* HERO */
-  .hero { background: var(--ink); padding: 50px 40px 40px; text-align: center; position: relative; overflow: hidden; flex-shrink: 0; }
-  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.15) 0%, transparent 70%), repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,168,76,0.05) 39px, rgba(201,168,76,0.05) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,168,76,0.05) 39px, rgba(201,168,76,0.05) 40px); pointer-events: none; }
-  .hero-badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--border); padding: 5px 14px; border-radius: 2px; margin-bottom: 16px; }
-  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 400; color: var(--parchment); line-height: 1.1; }
-  .hero h1 em { color: var(--gold); font-style: italic; }
-  .hero p { margin-top: 10px; color: rgba(245,240,232,0.6); font-size: 13px; font-weight: 300; }
+    /* HERO */
+    .hero { background: var(--ink); padding: 50px 40px 40px; text-align: center; position: relative; overflow: hidden; flex-shrink: 0; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.15) 0%, transparent 70%), repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,168,76,0.05) 39px, rgba(201,168,76,0.05) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,168,76,0.05) 39px, rgba(201,168,76,0.05) 40px); pointer-events: none; }
+    .hero-badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--border); padding: 5px 14px; border-radius: 2px; margin-bottom: 16px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 400; color: var(--parchment); line-height: 1.1; }
+    .hero h1 em { color: var(--gold); font-style: italic; }
+    .hero p { margin-top: 10px; color: rgba(245,240,232,0.6); font-size: 13px; font-weight: 300; }
 
-  /* AUTH & BOXES */
-  .auth-wrap { max-width: 420px; margin: 40px auto; width: 100%; padding: 0 20px; }
-  .auth-box, .paywall-box { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-  .auth-box h2, .paywall-box h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 20px; }
-  .auth-box h2 em { color: var(--gold); font-style: italic; }
+    /* AUTH & BOXES */
+    .auth-wrap { max-width: 420px; margin: 40px auto; width: 100%; padding: 0 20px; }
+    .auth-box, .paywall-box { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .auth-box h2, .paywall-box h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 20px; }
+    .auth-box h2 em { color: var(--gold); font-style: italic; }
 
-  /* VOICE MONITOR (NOUVEAU) */
-  .voice-meter { background: white; border: 1px solid var(--border); padding: 12px 16px; border-radius: 4px; margin: 10px 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .meter-bar { flex: 1; height: 6px; background: var(--cream); border-radius: 3px; overflow: hidden; position: relative; border: 1px solid rgba(0,0,0,0.05); }
-  #speed-fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.3s ease, background 0.3s; }
-  .status-text { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); min-width: 50px; }
+    /* VOICE MONITOR */
+    .voice-meter { background: white; border: 1px solid var(--border); padding: 12px 16px; border-radius: 4px; margin: 10px 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .meter-bar { flex: 1; height: 6px; background: var(--cream); border-radius: 3px; overflow: hidden; position: relative; border: 1px solid rgba(0,0,0,0.05); }
+    #speed-fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.3s ease, background 0.3s; }
+    .status-text { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); min-width: 50px; }
 
-  /* APP & CHAT */
-  .app { display: flex; flex-direction: column; flex: 1; max-width: 780px; margin: 0 auto; width: 100%; padding: 0 20px; }
-  .user-bar { max-width: 780px; margin: 0 auto; width: 100%; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-  
-  .chat { flex: 1; overflow-y: auto; padding: 24px 0; display: flex; flex-direction: column; gap: 18px; max-height: 450px; }
-  .msg { display: flex; gap: 14px; animation: fadeUp 0.3s ease; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .msg.user { flex-direction: row-reverse; }
-  .avatar { width: 34px; height: 34px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; font-weight: bold; }
-  .avatar.jury { background: var(--ink); color: var(--gold); font-family: 'Playfair Display', serif; }
-  .avatar.student { background: var(--gold-light); color: var(--ink); }
-  .bubble { max-width: 82%; padding: 12px 16px; line-height: 1.6; font-size: 14px; border-radius: 2px; }
-  .msg.jury .bubble { background: white; border: 1px solid var(--border); border-left: 3px solid var(--gold); }
-  .msg.user .bubble { background: var(--ink); color: var(--parchment); }
+    /* APP & CHAT */
+    .app { display: flex; flex-direction: column; flex: 1; max-width: 780px; margin: 0 auto; width: 100%; padding: 0 20px; }
+    .user-bar { max-width: 780px; margin: 0 auto; width: 100%; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .sims-badge { background: var(--ink); color: var(--gold); padding: 4px 12px; border-radius: 2px; font-size: 11px; font-weight: 600; transition: background 0.3s; }
+    
+    .context-bar { display: flex; gap: 10px; padding: 16px 0; border-bottom: 1px solid var(--border); align-items: center; }
+    .context-bar input { flex: 1; background: white; border: 1px solid var(--border); border-radius: 3px; padding: 9px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
+    .context-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--muted); }
 
-  /* INPUT AREA */
-  .input-area { padding: 16px 0 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
-  textarea { flex: 1; background: white; border: 1px solid var(--border); border-radius: 3px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; resize: none; }
-  textarea:focus { border-color: var(--gold); }
-  
-  .btn-primary, .btn-gold, .send-btn { cursor: pointer; transition: all 0.2s; border: none; border-radius: 3px; font-weight: 500; }
-  .send-btn { background: var(--ink); color: var(--gold); width: 46px; font-size: 18px; }
-  .btn-gold { background: var(--gold); color: var(--ink); padding: 14px 32px; }
-  .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(201,168,76,0.3); }
+    .chat { flex: 1; overflow-y: auto; padding: 24px 0; display: flex; flex-direction: column; gap: 18px; max-height: 400px; }
+    .msg { display: flex; gap: 14px; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .msg.user { flex-direction: row-reverse; }
+    .avatar { width: 34px; height: 34px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; font-weight: bold; }
+    .avatar.jury { background: var(--ink); color: var(--gold); font-family: 'Playfair Display', serif; }
+    .avatar.student { background: var(--gold-light); color: var(--ink); }
+    .bubble { max-width: 82%; padding: 12px 16px; line-height: 1.6; font-size: 14px; border-radius: 2px; }
+    .msg.jury .bubble { background: white; border: 1px solid var(--border); border-left: 3px solid var(--gold); }
+    .msg.user .bubble { background: var(--ink); color: var(--parchment); }
 
-  .hidden { display: none !important; }
-</style>
+    /* INPUT AREA */
+    .input-area { padding: 16px 0 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+    textarea { flex: 1; background: white; border: 1px solid var(--border); border-radius: 3px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; resize: none; min-height: 46px; }
+    .send-btn { background: var(--ink); color: var(--gold); border: none; border-radius: 3px; width: 46px; cursor: pointer; font-size: 18px; }
+
+    .hidden { display: none !important; }
+  </style>
 </head>
 <body>
 
 <div class="hero">
-  <div class="hero-badge">Prépa IA · Grand Oral</div>
+  <div class="hero-badge">Prépa IA · Elite Coach</div>
   <h1>Votre jury<br><em>virtuel</em> vous attend.</h1>
-  <p>Simulation d'entretien · Feedback instantané · Méthode éprouvée</p>
+  <p>Simulation d'entretien · Analyse vocale · Performance pro</p>
 </div>
 
-<!-- AUTH -->
 <div class="auth-wrap" id="authSection">
   <div class="auth-box">
     <h2 id="authTitle">Se <em>connecter</em></h2>
-    <div id="authError" class="error-msg hidden"></div>
-    <div class="field">
-      <label>Email</label>
-      <input type="email" id="authEmail" placeholder="votre@email.com" />
+    <div class="field" style="margin-bottom:15px;">
+      <label style="font-size:11px; text-transform:uppercase; color:var(--muted);">Email</label>
+      <input type="email" id="authEmail" style="width:100%; padding:10px; border:1px solid var(--border);" placeholder="votre@email.com" />
     </div>
-    <div class="field">
-      <label>Mot de passe</label>
-      <input type="password" id="authPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter') authSubmit()" />
+    <div class="field" style="margin-bottom:20px;">
+      <label style="font-size:11px; text-transform:uppercase; color:var(--muted);">Mot de passe</label>
+      <input type="password" id="authPassword" style="width:100%; padding:10px; border:1px solid var(--border);" placeholder="••••••••" />
     </div>
-    <button class="btn-primary" id="authBtn" onclick="authSubmit()">Se connecter</button>
-    <div class="auth-switch" id="authSwitch">
-      Pas encore de compte ? <a onclick="toggleAuth()">S'inscrire</a>
-    </div>
+    <button class="btn-primary" style="width:100%; background:var(--ink); color:var(--gold); padding:12px; border:none; border-radius:3px; cursor:pointer;" onclick="authSubmit()">Accéder au coaching</button>
   </div>
 </div>
 
-<!-- PAYWALL -->
-<div class="paywall hidden" id="paywallSection">
+<div class="paywall hidden" id="paywallSection" style="max-width:780px; margin:40px auto; padding:0 20px; text-align:center;">
   <div class="paywall-box">
-    <h2>Vous avez utilisé vos 2 simulations gratuites 🎓</h2>
-    <p>Passez en Premium pour continuer à vous entraîner sans limite.</p>
-    <div class="price">9,90€ <span>/ mois</span></div>
-    <ul class="features">
-      <li>Simulations illimitées chaque jour</li>
-      <li>Feedback détaillé avec scores</li>
-      <li>Tous les sujets du Grand Oral</li>
-      <li>Accès immédiat</li>
-    </ul>
-    <button class="btn-gold" onclick="goToPremium()">Passer en Premium</button>
+    <h2>Diagnostic 3 min terminé ! 🚀</h2>
+    <p>Vous avez un fort potentiel. Pour réussir votre entretien, débloquez le coaching complet.</p>
+    <div style="font-size:32px; color:var(--gold); margin:15px 0;">9,90€ <span style="font-size:14px; color:var(--muted);">/ mois</span></div>
+    <button class="btn-gold" style="width:100%;" onclick="location.reload()">Prendre un Pass Premium</button>
   </div>
 </div>
 
-<!-- USER BAR + APP -->
 <div id="userBar" class="user-bar hidden">
-  <div class="user-info">Connecté : <strong id="userEmail"></strong></div>
+  <div class="user-info" style="font-size:12px; color:var(--muted);">Connecté : <strong id="userEmail">Visiteur</strong></div>
   <div class="sims-counter">
-    <span id="simsBadge" class="sims-badge">0/2 simulations</span>
-    <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    <span id="simsBadge" class="sims-badge">3 min gratuites</span>
+    <button onclick="location.reload()" style="background:none; border:none; font-size:11px; color:var(--rouge); cursor:pointer; margin-left:10px;">Quitter</button>
   </div>
 </div>
 
 <div class="app hidden" id="appSection">
   <div class="context-bar">
-    <span class="context-label">Sujet</span>
-    <input type="text" id="subject" placeholder="Ex : Le droit à l'oubli à l'ère numérique" />
-    <button class="reset-btn" onclick="resetChat()">↺ Nouveau</button>
+    <span class="context-label">Poste / Sujet</span>
+    <input type="text" id="subject" placeholder="Ex: Analyste financier ou Droit à l'oubli" />
+    <button class="reset-btn" style="background:none; border:1px solid var(--border); padding:5px 10px; border-radius:2px; font-size:12px; cursor:pointer;" onclick="location.reload()">↺ Reset</button>
   </div>
+
+  <div id="voiceMonitor" class="voice-meter hidden">
+    <span class="status-text">Débit</span>
+    <div class="meter-bar"><div id="speed-fill" style="width: 45%;"></div></div>
+    <span id="speed-label" class="status-text">STABLE</span>
+  </div>
+
   <div class="chat" id="chat">
-    <div class="empty-state">
-      <div class="icon">⚖️</div>
-      <p>Renseignez votre sujet ci-dessus,<br>puis présentez-vous au jury.</p>
+    <div style="text-align:center; padding:40px; color:var(--muted); font-style:italic;">
+      Renseignez votre poste ou sujet, puis envoyez votre premier message pour démarrer le chrono.
     </div>
   </div>
+
   <div class="input-area">
-    <textarea id="userInput" placeholder="Votre réponse au jury…" rows="1"
-      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <textarea id="userInput" placeholder="Votre réponse au jury..." onkeydown="handleKey(event)"></textarea>
     <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
   </div>
 </div>
 
 <script>
-  const MAX_FREE = 2;
-  const MAX_GUEST = 1; // simulations sans compte
-  let currentUser = null;
+  const TRIAL_LIMIT_SECONDS = 180;
   let history = [];
   let isLoading = false;
-  let exchangeCount = 0;
-  let isRegisterMode = false;
   let simulationStarted = false;
-  let guestSimsUsed = parseInt(localStorage.getItem('prepaai_guest') || '0');
+  let timerInterval;
 
-  // Load user from localStorage
-  const saved = localStorage.getItem('prepaai_user');
-  if (saved) {
-    currentUser = JSON.parse(saved);
-    showApp();
-  } else {
-    showGuestApp();
-  }
-
-  function toggleAuth() {
-    isRegisterMode = !isRegisterMode;
-    document.getElementById('authTitle').innerHTML = isRegisterMode ? 'S\'<em>inscrire</em>' : 'Se <em>connecter</em>';
-    document.getElementById('authBtn').textContent = isRegisterMode ? 'S\'inscrire' : 'Se connecter';
-    document.getElementById('authSwitch').innerHTML = isRegisterMode
-      ? 'Déjà un compte ? <a onclick="toggleAuth()">Se connecter</a>'
-      : 'Pas encore de compte ? <a onclick="toggleAuth()">S\'inscrire</a>';
-    document.getElementById('authError').classList.add('hidden');
-  }
-
-  async function authSubmit() {
-    const email = document.getElementById('authEmail').value.trim();
-    const password = document.getElementById('authPassword').value;
-    const btn = document.getElementById('authBtn');
-    const errEl = document.getElementById('authError');
-    errEl.classList.add('hidden');
-
-    if (!email || !password) { showError('Email et mot de passe requis.'); return; }
-
-    btn.disabled = true;
-    btn.textContent = '...';
-
-    const endpoint = isRegisterMode ? '/api/register' : '/api/login';
-    try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (data.error) { showError(data.error); btn.disabled = false; btn.textContent = isRegisterMode ? "S'inscrire" : 'Se connecter'; return; }
-      currentUser = data.user;
-      localStorage.setItem('prepaai_user', JSON.stringify(currentUser));
-      showApp();
-    } catch(e) {
-      showError('Erreur de connexion.');
-      btn.disabled = false;
-      btn.textContent = isRegisterMode ? "S'inscrire" : 'Se connecter';
+  // Détection du mode visiteur immédiat pour la démo
+  window.onload = () => {
+    const user = localStorage.getItem('prepaai_user');
+    if (user) {
+      document.getElementById('userEmail').textContent = JSON.parse(user).email;
     }
-  }
-
-  function showError(msg) {
-    const el = document.getElementById('authError');
-    el.textContent = msg;
-    el.classList.remove('hidden');
-  }
-
-  function showGuestApp() {
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('appSection').classList.remove('hidden');
     document.getElementById('userBar').classList.remove('hidden');
+  };
+
+  function startTrialTimer() {
+    let timeLeft = TRIAL_LIMIT_SECONDS;
     const badge = document.getElementById('simsBadge');
-    badge.textContent = 'Invité · 1 simulation gratuite';
-    badge.className = 'sims-badge';
-    document.getElementById('userEmail').textContent = 'Visiteur';
-    initChat();
+    document.getElementById('voiceMonitor').classList.remove('hidden');
+
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      let mins = Math.floor(timeLeft / 60);
+      let secs = timeLeft % 60;
+      badge.textContent = `Temps restant : ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      
+      if (timeLeft < 30) badge.style.background = "var(--rouge)";
+
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        document.getElementById('appSection').classList.add('hidden');
+        document.getElementById('paywallSection').classList.remove('hidden');
+      }
+      
+      // Simulation visuelle du débit vocal
+      const randomSpeed = Math.floor(Math.random() * (70 - 30 + 1)) + 30;
+      document.getElementById('speed-fill').style.width = randomSpeed + '%';
+    }, 1000);
   }
 
-  function showApp() {
-    document.getElementById('authSection').classList.add('hidden');
-    document.getElementById('paywallSection').classList.add('hidden');
+  async function sendMessage() {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if (!text || isLoading) return;
 
-    if (!currentUser.is_premium && (currentUser.simsToday || 0) >= MAX_FREE) {
-      document.getElementById('paywallSection').classList.remove('hidden');
-      document.getElementById('userBar').classList.remove('hidden');
-    } else {
-      document.getElementById('appSection').classList.remove('hidden');
-      document.getElementById('userBar').classList.remove('hidden');
+    if (!simulationStarted) {
+      startTrialTimer();
+      simulationStarted = true;
     }
 
-    document.getElementById('userEmail').textContent = currentUser.email;
-    updateSimsBadge();
-    initChat();
-  }
-
-  function updateSimsBadge() {
-    const badge = document.getElementById('simsBadge');
-    if (currentUser.is_premium) {
-      badge.textContent = 'Premium ✦';
-      badge.className = 'sims-badge premium';
-    } else {
-      const used = currentUser.simsToday || 0;
-      badge.textContent = `${used}/${MAX_FREE} simulations`;
-      badge.className = 'sims-badge';
-    }
-  }
-
-  function logout() {
-    localStorage.removeItem('prepaai_user');
-    currentUser = null;
-    history = [];
-    exchangeCount = 0;
-    simulationStarted = false;
-    document.getElementById('authSection').classList.remove('hidden');
-    document.getElementById('appSection').classList.add('hidden');
-    document.getElementById('userBar').classList.add('hidden');
-    document.getElementById('paywallSection').classList.add('hidden');
-    document.getElementById('authEmail').value = '';
-    document.getElementById('authPassword').value = '';
-  }
-
-  function goToPremium() {
-    alert('Intégration Stripe à venir — contactez-nous pour le Premium !');
-  }
-
-  function resetChat() {
-    history = [];
-    exchangeCount = 0;
-    simulationStarted = false;
-    document.getElementById('chat').innerHTML = `
-      <div class="empty-state"><div class="icon">⚖️</div>
-      <p>Renseignez votre sujet ci-dessus,<br>puis présentez-vous au jury.</p></div>`;
-  }
-
-  async function initChat() {
+    appendMsg('user', text);
+    history.push({ role: 'user', content: text });
+    input.value = '';
     showTyping();
+
     try {
       const res = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [{ role: 'user', content: "Commence la simulation. Accueille l'étudiant." }], subject: '', context: 'Grand Oral Baccalauréat', mode: 'GRAND ORAL' })
+        body: JSON.stringify({ messages: history, subject: document.getElementById('subject').value, mode: 'PRO_INTERVIEW' })
       });
       const data = await res.json();
       removeTyping();
@@ -291,135 +205,33 @@
         history.push({ role: 'assistant', content: data.reply });
         appendMsg('assistant', data.reply);
       }
-    } catch(e) { removeTyping(); }
+    } catch(e) {
+      removeTyping();
+      appendMsg('assistant', "⚠️ Le jury a été déconnecté. Vérifiez votre API.");
+    }
   }
 
-  function autoResize(el) {
-    el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 110) + 'px';
-  }
-
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  }
-
-  function appendMsg(role, content, scores) {
+  function appendMsg(role, content) {
     const chat = document.getElementById('chat');
-    const empty = chat.querySelector('.empty-state');
-    if (empty) empty.remove();
-
+    if (history.length === 1) chat.innerHTML = '';
     const div = document.createElement('div');
     div.className = `msg ${role === 'assistant' ? 'jury' : 'user'}`;
-    const av = document.createElement('div');
-    av.className = `avatar ${role === 'assistant' ? 'jury' : 'student'}`;
-    av.textContent = role === 'assistant' ? 'J' : 'E';
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.textContent = content;
-
-    if (scores && role === 'assistant') {
-      const card = document.createElement('div');
-      card.className = 'score-card';
-      for (const [k, v] of Object.entries(scores)) {
-        const cls = v >= 15 ? 'high' : v >= 10 ? 'mid' : 'low';
-        card.innerHTML += `<div class="score-item"><span class="label">${k}</span><span class="val ${cls}">${v}/20</span></div>`;
-      }
-      bubble.appendChild(card);
-    }
-    div.appendChild(av); div.appendChild(bubble);
+    div.innerHTML = `<div class="avatar ${role === 'assistant' ? 'jury' : 'student'}">${role === 'assistant' ? 'J' : 'E'}</div>
+                     <div class="bubble">${content}</div>`;
     chat.appendChild(div);
     chat.scrollTop = chat.scrollHeight;
   }
 
   function showTyping() {
     const chat = document.getElementById('chat');
-    const empty = chat.querySelector('.empty-state');
-    if (empty) empty.remove();
     const wrap = document.createElement('div');
     wrap.className = 'msg jury'; wrap.id = 'typing';
-    const av = document.createElement('div'); av.className = 'avatar jury'; av.textContent = 'J';
-    const ind = document.createElement('div'); ind.className = 'typing-indicator';
-    ind.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-    wrap.appendChild(av); wrap.appendChild(ind);
-    chat.appendChild(wrap); chat.scrollTop = chat.scrollHeight;
+    wrap.innerHTML = `<div class="avatar jury">J</div><div class="bubble">...</div>`;
+    chat.appendChild(wrap);
   }
 
   function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
-
-  async function sendMessage() {
-    const input = document.getElementById('userInput');
-    const btn = document.getElementById('sendBtn');
-    const subject = document.getElementById('subject').value.trim();
-    const text = input.value.trim();
-    if (!text || isLoading) return;
-
-    // Check freemium limit — count new simulation on first user message
-    if (!simulationStarted) {
-      // Guest (not logged in)
-      if (!currentUser) {
-        if (guestSimsUsed >= MAX_GUEST) {
-          // Show register wall
-          document.getElementById('appSection').classList.add('hidden');
-          document.getElementById('userBar').classList.add('hidden');
-          document.getElementById('authSection').classList.remove('hidden');
-          isRegisterMode = true;
-          document.getElementById('authTitle').innerHTML = 'Créez votre <em>compte gratuit</em>';
-          document.getElementById('authBtn').textContent = "S'inscrire";
-          document.getElementById('authSwitch').innerHTML = 'Déjà un compte ? <a onclick="toggleAuth()">Se connecter</a>';
-          showError('Créez un compte gratuit pour continuer — 2 simulations/jour !');
-          return;
-        }
-        guestSimsUsed++;
-        localStorage.setItem('prepaai_guest', guestSimsUsed);
-      } else {
-        if (!currentUser.is_premium && (currentUser.simsToday || 0) >= MAX_FREE) {
-          document.getElementById('appSection').classList.add('hidden');
-          document.getElementById('paywallSection').classList.remove('hidden');
-          return;
-        }
-        currentUser.simsToday = (currentUser.simsToday || 0) + 1;
-        localStorage.setItem('prepaai_user', JSON.stringify(currentUser));
-        updateSimsBadge();
-        fetch('/api/simulation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: currentUser.id })
-        });
-      }
-      simulationStarted = true;
-    }
-
-    isLoading = true; btn.disabled = true;
-    input.value = ''; input.style.height = 'auto';
-    exchangeCount++;
-    appendMsg('user', text);
-    history.push({ role: 'user', content: text });
-    showTyping();
-
-    try {
-      const res = await fetch('/api/claude', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history, subject, context: 'Grand Oral Baccalauréat', mode: 'GRAND ORAL' })
-      });
-      const data = await res.json();
-      removeTyping();
-
-      let reply = data.reply || 'Réponse non disponible.';
-      let scores = null;
-      const jsonMatch = reply.match(/\{"scores":\s*\{[^}]+\}\}/);
-      if (jsonMatch) {
-        try { scores = JSON.parse(jsonMatch[0]).scores; reply = reply.replace(jsonMatch[0], '').trim(); } catch(e) {}
-      }
-      history.push({ role: 'assistant', content: reply });
-      appendMsg('assistant', reply, scores);
-    } catch(e) {
-      removeTyping();
-      appendMsg('assistant', '⚠️ Erreur de connexion.');
-    }
-
-    isLoading = false; btn.disabled = false; input.focus();
-  }
+  function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 </script>
 </body>
 </html>
