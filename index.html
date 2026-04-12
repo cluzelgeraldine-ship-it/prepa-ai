@@ -36,7 +36,7 @@
     .btn-mic.active { background: var(--rouge); color: white; animation: pulse 1.5s infinite; }
     
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-    .paywall { text-align: center; padding: 40px; background: white; border: 1px solid var(--border); border-radius: 8px; margin-top: 20px; }
+    .paywall-box { text-align:center; padding:40px; background:white; border:1px solid var(--gold); border-radius:8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top:20px; }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -58,22 +58,26 @@
     <div class="meter-bar"><div id="speed-fill"></div></div>
   </div>
 
-  <div class="chat" id="chat">
-    <div style="text-align:center; color:gray; font-style:italic;">Cliquez sur le micro pour commencer votre plaidoirie...</div>
-  </div>
+  <div class="chat" id="chat"></div>
 
   <div class="input-area">
     <button class="btn-icon btn-mic" id="micBtn" onclick="toggleMic()">🎙️</button>
-    <textarea id="userInput" placeholder="Votre réponse..." rows="1"></textarea>
+    <textarea id="userInput" placeholder="Parlez ou écrivez..." rows="1"></textarea>
     <button class="btn-icon" onclick="sendMessage()">↑</button>
   </div>
 </div>
 
 <div id="paywallSection" class="app hidden">
-  <div class="paywall">
-    <h2>Diagnostic terminé ⚖️</h2>
-    <p>Votre session de 3 minutes est finie. Débloquez le débriefing complet de votre prestation.</p>
-    <button style="margin-top:20px; background:var(--gold); padding:15px 30px; border:none; cursor:pointer; font-weight:bold;" onclick="location.reload()">Prendre le Pass Réussite</button>
+  <div class="paywall-box">
+    <h2 style="font-family:'Playfair Display', serif;">Diagnostic terminé ⚖️</h2>
+    <p style="margin: 15px 0; color:gray;">Votre structure est prometteuse. Débloquez la session complète de 20 min et recevez votre débriefing.</p>
+    <div style="background:var(--cream); padding:20px; border-radius:4px; margin-bottom:20px;">
+      <span style="font-size:28px; font-weight:bold;">4,90€</span>
+      <span style="font-size:14px; color:gray;"> / la session</span>
+    </div>
+    <button onclick="window.location.href='TON_LIEN_STRIPE_ICI'" style="width:100%; background:var(--ink); color:var(--gold); padding:16px; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">
+      DÉBLOQUER MA SESSION
+    </button>
   </div>
 </div>
 
@@ -81,40 +85,32 @@
   let history = [];
   let isListening = false;
   let simulationStarted = false;
-  const TRIAL_TIME = 180;
+  let isPremium = false;
+  let TRIAL_TIME = 180;
   
-  // Configuration Voix (Reconnaissance)
+  // Vérification retour Stripe
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('pay') === 'success') {
+    isPremium = true;
+    TRIAL_TIME = 1200; // 20 minutes
+    document.getElementById('simsBadge').textContent = "MODE ILLIMITÉ";
+    document.getElementById('simsBadge').style.background = "var(--gold)";
+    document.getElementById('simsBadge').style.color = "var(--ink)";
+  }
+
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = SpeechRecognition ? new SpeechRecognition() : null;
-  if(recognition) {
-    recognition.lang = 'fr-FR';
-    recognition.continuous = false;
-  }
-
-  // Configuration Voix (Synthèse)
   const synth = window.speechSynthesis;
 
-  function toggleMic() {
-    if (!recognition) return alert("Micro non supporté");
-    if (isListening) {
-      recognition.stop();
-    } else {
-      recognition.start();
-      document.getElementById('micBtn').classList.add('active');
-      isListening = true;
-    }
+  if(recognition) {
+    recognition.lang = 'fr-FR';
+    recognition.onresult = (e) => { document.getElementById('userInput').value = e.results[0][0].transcript; sendMessage(); };
+    recognition.onend = () => { document.getElementById('micBtn').classList.remove('active'); isListening = false; };
   }
 
-  if(recognition) {
-    recognition.onresult = (event) => {
-      const text = event.results[0][0].transcript;
-      document.getElementById('userInput').value = text;
-      sendMessage();
-    };
-    recognition.onend = () => {
-      document.getElementById('micBtn').classList.remove('active');
-      isListening = false;
-    };
+  function toggleMic() {
+    if (isListening) { recognition.stop(); } 
+    else { recognition.start(); document.getElementById('micBtn').classList.add('active'); isListening = true; }
   }
 
   function startTimer() {
@@ -122,27 +118,24 @@
     document.getElementById('voiceMonitor').classList.remove('hidden');
     const interval = setInterval(() => {
       timeLeft--;
-      let mins = Math.floor(timeLeft / 60);
-      let secs = timeLeft % 60;
-      document.getElementById('simsBadge').textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-      
-      // Simulation visuelle du débit
+      if (!isPremium) {
+        let mins = Math.floor(timeLeft / 60);
+        let secs = timeLeft % 60;
+        document.getElementById('simsBadge').textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      }
       document.getElementById('speed-fill').style.width = isListening ? (Math.random() * 80 + 20) + '%' : '0%';
-      
-      if (timeLeft <= 0) {
+      if (timeLeft <= 0 && !isPremium) {
         clearInterval(interval);
         document.getElementById('appSection').classList.add('hidden');
         document.getElementById('paywallSection').classList.remove('hidden');
-        synth.cancel(); // Arrête le jury de parler
+        synth.cancel();
       }
     }, 1000);
   }
 
   function speak(text) {
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'fr-FR';
-    utter.rate = 1.1; 
-    utter.pitch = 0.8; // Voix de jury sérieuse
+    utter.lang = 'fr-FR'; utter.rate = 1.1; utter.pitch = 0.8;
     synth.speak(utter);
   }
 
@@ -150,29 +143,20 @@
     const input = document.getElementById('userInput');
     const text = input.value.trim();
     if (!text) return;
-
     if (!simulationStarted) { startTimer(); simulationStarted = true; }
-
     appendMsg('user', text);
     input.value = '';
-    
     try {
       const res = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          messages: [...history, {role:'user', content:text}], 
-          subject: document.getElementById('subject').value || "Sujet non défini",
-          mode: 'PRO'
-        })
+        body: JSON.stringify({ messages: [...history, {role:'user', content:text}], subject: document.getElementById('subject').value || "Concours" })
       });
       const data = await res.json();
       appendMsg('assistant', data.reply);
       history.push({role:'user', content:text}, {role:'assistant', content:data.reply});
       speak(data.reply);
-    } catch(e) {
-      appendMsg('assistant', "Erreur : Vérifiez votre connexion.");
-    }
+    } catch(e) { appendMsg('assistant', "Erreur de connexion."); }
   }
 
   function appendMsg(role, content) {
