@@ -9,7 +9,7 @@ import openai
 app = FastAPI()
 
 # 1. TA CLÉ API
-openai.api_key = "os.getenv("OPENAI_API_KEY")"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # 2. MODÈLE DE DONNÉES
 class Message(BaseModel):
