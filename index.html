@@ -7,16 +7,16 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --ink: #1a1510; --parchment: #f5f0e8; --gold: #c9a84c; --gold-light: #e8d5a0; --rouge: #8b2020; --cream: #faf7f2; --border: rgba(201,168,76,0.3); }
+    :root { --ink: #1a1510; --parchment: #f5f0e8; --gold: #c9a84c; --gold-dark: #b08d3e; --rouge: #8b2020; --cream: #faf7f2; --border: rgba(201,168,76,0.3); }
     body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
     
-    .hero { background: var(--ink); padding: 40px 20px; text-align: center; color: white; position: relative; }
+    .hero { background: var(--ink); padding: 40px 20px; text-align: center; color: white; border-bottom: 3px solid var(--gold); }
     .hero h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--parchment); }
     .hero h1 em { color: var(--gold); font-style: italic; }
     
     .app { max-width: 780px; margin: 0 auto; width: 100%; padding: 20px; flex: 1; display: flex; flex-direction: column; }
     .user-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
-    .sims-badge { background: var(--ink); color: var(--gold); padding: 5px 12px; border-radius: 2px; font-size: 12px; font-weight: bold; }
+    .sims-badge { background: var(--ink); color: var(--gold); padding: 5px 12px; border-radius: 2px; font-size: 12px; font-weight: bold; border: 1px solid var(--gold); }
     
     .voice-meter { background: white; border: 1px solid var(--border); padding: 12px; border-radius: 4px; margin: 10px 0; display: flex; align-items: center; gap: 10px; }
     .meter-bar { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
@@ -26,58 +26,69 @@
     .msg { display: flex; gap: 10px; }
     .msg.user { flex-direction: row-reverse; }
     .bubble { max-width: 80%; padding: 12px; border-radius: 4px; font-size: 14px; line-height: 1.5; border: 1px solid var(--border); }
-    .msg.jury .bubble { background: white; border-left: 4px solid var(--gold); }
+    .msg.jury .bubble { background: white; border-left: 4px solid var(--gold); box-shadow: 2px 2px 10px rgba(0,0,0,0.05); }
     .msg.user .bubble { background: var(--ink); color: white; }
 
     .input-area { padding: 20px 0; display: flex; gap: 10px; align-items: center; }
-    textarea { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 4px; resize: none; font-family: inherit; }
+    textarea { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 4px; resize: none; font-family: inherit; font-size: 15px; }
     .btn-icon { background: var(--ink); color: var(--gold); border: none; width: 46px; height: 46px; cursor: pointer; border-radius: 4px; font-size: 20px; display: flex; align-items: center; justify-content: center; }
     .btn-mic { background: var(--gold); color: var(--ink); }
     .btn-mic.active { background: var(--rouge); color: white; animation: pulse 1.5s infinite; }
     
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-    .paywall-box { text-align:center; padding:40px; background:white; border:1px solid var(--gold); border-radius:8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top:20px; }
+    
+    /* Paywall Deluxe */
+    .paywall-box { text-align:center; padding:40px; background:white; border:2px solid var(--gold); border-radius:8px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); margin-top:20px; }
+    .paywall-title { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; color: var(--ink); }
+    .paywall-price { background: var(--parchment); padding: 15px; border-radius: 4px; display: inline-block; margin: 20px 0; border: 1px solid var(--gold); }
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
 <div class="hero">
-  <h1>Prépa <em>CRFPA</em> · Oral</h1>
-  <p style="font-size: 12px; opacity: 0.7; margin-top: 5px;">Entraînement vocal immersif</p>
+  <h1>Prépa <em>CRFPA</em> · Coach Oral</h1>
+  <p style="font-size: 12px; opacity: 0.8; margin-top: 5px; letter-spacing: 1px;">SIMULATION EXAMEN · JURY D'ÉLITE</p>
 </div>
 
 <div class="app" id="appSection">
   <div class="user-bar">
-    <input type="text" id="subject" style="padding: 5px; border: 1px solid var(--border); width: 60%;" placeholder="Sujet (ex: Droit à l'oubli)">
-    <span id="simsBadge" class="sims-badge">3:00</span>
+    <input type="text" id="subject" style="padding: 8px; border: 1px solid var(--border); width: 60%; background: transparent; font-weight: bold;" placeholder="Votre Sujet (ex: Droit à l'oubli)">
+    <span id="simsBadge" class="sims-badge">3:00 MIN FREE</span>
   </div>
 
   <div id="voiceMonitor" class="voice-meter hidden">
-    <span style="font-size: 10px; font-weight: bold;">DÉBIT VOX</span>
+    <span style="font-size: 10px; font-weight: bold; color: var(--gold-dark);">ANALYSE ÉLOCUTION</span>
     <div class="meter-bar"><div id="speed-fill"></div></div>
   </div>
 
-  <div class="chat" id="chat"></div>
+  <div class="chat" id="chat">
+    <div style="text-align:center; color:var(--gold-dark); font-style:italic; font-size: 13px;">Cliquez sur le micro pour débuter votre introduction face au jury.</div>
+  </div>
 
   <div class="input-area">
     <button class="btn-icon btn-mic" id="micBtn" onclick="toggleMic()">🎙️</button>
-    <textarea id="userInput" placeholder="Parlez ou écrivez..." rows="1"></textarea>
+    <textarea id="userInput" placeholder="Répondez oralement ou tapez ici..." rows="1"></textarea>
     <button class="btn-icon" onclick="sendMessage()">↑</button>
   </div>
 </div>
 
 <div id="paywallSection" class="app hidden">
   <div class="paywall-box">
-    <h2 style="font-family:'Playfair Display', serif;">Diagnostic terminé ⚖️</h2>
-    <p style="margin: 15px 0; color:gray;">Votre structure est prometteuse. Débloquez la session complète de 20 min et recevez votre débriefing.</p>
-    <div style="background:var(--cream); padding:20px; border-radius:4px; margin-bottom:20px;">
-      <span style="font-size:28px; font-weight:bold;">4,90€</span>
-      <span style="font-size:14px; color:gray;"> / la session</span>
+    <div class="paywall-title">Diagnostic d'Aptitude Terminé ⚖️</div>
+    <p style="color:#555; line-height: 1.6;">Votre structure de plan est enregistrée. Le jury est prêt à passer à l'entretien de 20 minutes pour tester votre résistance.</p>
+    
+    <div class="paywall-price">
+      <span style="font-size:32px; font-weight:bold; color: var(--ink);">4,90€</span>
+      <span style="font-size:14px; color:var(--gold-dark); display:block;">Session complète + Débriefing sémantique</span>
     </div>
-    <button onclick="window.location.href='TON_LIEN_STRIPE_ICI'" style="width:100%; background:var(--ink); color:var(--gold); padding:16px; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">
-      DÉBLOQUER MA SESSION
+
+    <button 
+      onclick="window.location.href='TON_LIEN_STRIPE_ICI'" 
+      style="width:100%; background:var(--ink); color:var(--gold); padding:18px; border:none; border-radius:4px; font-weight:bold; cursor:pointer; font-size:16px; text-transform:uppercase; letter-spacing:1px;">
+      Accéder à mon Oral complet
     </button>
+    <p style="font-size:11px; color:gray; margin-top:15px;">Paiement sécurisé · Accès immédiat</p>
   </div>
 </div>
 
@@ -88,12 +99,12 @@
   let isPremium = false;
   let TRIAL_TIME = 180;
   
-  // Vérification retour Stripe
+  // Script Auto-Unlock (Si l'URL contient ?pay=success)
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('pay') === 'success') {
     isPremium = true;
     TRIAL_TIME = 1200; // 20 minutes
-    document.getElementById('simsBadge').textContent = "MODE ILLIMITÉ";
+    document.getElementById('simsBadge').textContent = "SESSION COMPLÈTE ACTIVÉE";
     document.getElementById('simsBadge').style.background = "var(--gold)";
     document.getElementById('simsBadge').style.color = "var(--ink)";
   }
@@ -121,7 +132,7 @@
       if (!isPremium) {
         let mins = Math.floor(timeLeft / 60);
         let secs = timeLeft % 60;
-        document.getElementById('simsBadge').textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        document.getElementById('simsBadge').textContent = `OFFERT : ${mins}:${secs < 10 ? '0' : ''}${secs}`;
       }
       document.getElementById('speed-fill').style.width = isListening ? (Math.random() * 80 + 20) + '%' : '0%';
       if (timeLeft <= 0 && !isPremium) {
@@ -135,7 +146,7 @@
 
   function speak(text) {
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'fr-FR'; utter.rate = 1.1; utter.pitch = 0.8;
+    utter.lang = 'fr-FR'; utter.rate = 1.05; utter.pitch = 0.85;
     synth.speak(utter);
   }
 
@@ -150,13 +161,17 @@
       const res = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [...history, {role:'user', content:text}], subject: document.getElementById('subject').value || "Concours" })
+        body: JSON.stringify({ 
+          messages: [...history, {role:'user', content:text}], 
+          subject: document.getElementById('subject').value || "Grand Oral Juridique",
+          mode: 'CRFPA'
+        })
       });
       const data = await res.json();
       appendMsg('assistant', data.reply);
       history.push({role:'user', content:text}, {role:'assistant', content:data.reply});
       speak(data.reply);
-    } catch(e) { appendMsg('assistant', "Erreur de connexion."); }
+    } catch(e) { appendMsg('assistant', "Le jury est momentanément indisponible."); }
   }
 
   function appendMsg(role, content) {
