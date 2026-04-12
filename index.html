@@ -3,235 +3,186 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prépa IA · Grand Oral & Entretien Pro</title>
+  <title>Prépa IA · Elite Coach CRFPA</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ink: #1a1510;
-      --parchment: #f5f0e8;
-      --gold: #c9a84c;
-      --gold-light: #e8d5a0;
-      --rouge: #8b2020;
-      --cream: #faf7f2;
-      --muted: #7a6f62;
-      --border: rgba(201,168,76,0.3);
-    }
-
+    :root { --ink: #1a1510; --parchment: #f5f0e8; --gold: #c9a84c; --gold-light: #e8d5a0; --rouge: #8b2020; --cream: #faf7f2; --border: rgba(201,168,76,0.3); }
     body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
-
-    /* HERO */
-    .hero { background: var(--ink); padding: 50px 40px 40px; text-align: center; position: relative; overflow: hidden; flex-shrink: 0; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.15) 0%, transparent 70%), repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,168,76,0.05) 39px, rgba(201,168,76,0.05) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,168,76,0.05) 39px, rgba(201,168,76,0.05) 40px); pointer-events: none; }
-    .hero-badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--border); padding: 5px 14px; border-radius: 2px; margin-bottom: 16px; }
-    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 400; color: var(--parchment); line-height: 1.1; }
-    .hero h1 em { color: var(--gold); font-style: italic; }
-    .hero p { margin-top: 10px; color: rgba(245,240,232,0.6); font-size: 13px; font-weight: 300; }
-
-    /* AUTH & BOXES */
-    .auth-wrap { max-width: 420px; margin: 40px auto; width: 100%; padding: 0 20px; }
-    .auth-box, .paywall-box { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-    .auth-box h2, .paywall-box h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 20px; }
-    .auth-box h2 em { color: var(--gold); font-style: italic; }
-
-    /* VOICE MONITOR */
-    .voice-meter { background: white; border: 1px solid var(--border); padding: 12px 16px; border-radius: 4px; margin: 10px 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .meter-bar { flex: 1; height: 6px; background: var(--cream); border-radius: 3px; overflow: hidden; position: relative; border: 1px solid rgba(0,0,0,0.05); }
-    #speed-fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.3s ease, background 0.3s; }
-    .status-text { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); min-width: 50px; }
-
-    /* APP & CHAT */
-    .app { display: flex; flex-direction: column; flex: 1; max-width: 780px; margin: 0 auto; width: 100%; padding: 0 20px; }
-    .user-bar { max-width: 780px; margin: 0 auto; width: 100%; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-    .sims-badge { background: var(--ink); color: var(--gold); padding: 4px 12px; border-radius: 2px; font-size: 11px; font-weight: 600; transition: background 0.3s; }
     
-    .context-bar { display: flex; gap: 10px; padding: 16px 0; border-bottom: 1px solid var(--border); align-items: center; }
-    .context-bar input { flex: 1; background: white; border: 1px solid var(--border); border-radius: 3px; padding: 9px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
-    .context-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--muted); }
-
-    .chat { flex: 1; overflow-y: auto; padding: 24px 0; display: flex; flex-direction: column; gap: 18px; max-height: 400px; }
-    .msg { display: flex; gap: 14px; animation: fadeUp 0.3s ease; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .hero { background: var(--ink); padding: 40px 20px; text-align: center; color: white; position: relative; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--parchment); }
+    .hero h1 em { color: var(--gold); font-style: italic; }
+    
+    .app { max-width: 780px; margin: 0 auto; width: 100%; padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .user-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+    .sims-badge { background: var(--ink); color: var(--gold); padding: 5px 12px; border-radius: 2px; font-size: 12px; font-weight: bold; }
+    
+    .voice-meter { background: white; border: 1px solid var(--border); padding: 12px; border-radius: 4px; margin: 10px 0; display: flex; align-items: center; gap: 10px; }
+    .meter-bar { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+    #speed-fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.2s; }
+    
+    .chat { flex: 1; overflow-y: auto; padding: 20px 0; display: flex; flex-direction: column; gap: 15px; max-height: 450px; }
+    .msg { display: flex; gap: 10px; }
     .msg.user { flex-direction: row-reverse; }
-    .avatar { width: 34px; height: 34px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; font-weight: bold; }
-    .avatar.jury { background: var(--ink); color: var(--gold); font-family: 'Playfair Display', serif; }
-    .avatar.student { background: var(--gold-light); color: var(--ink); }
-    .bubble { max-width: 82%; padding: 12px 16px; line-height: 1.6; font-size: 14px; border-radius: 2px; }
-    .msg.jury .bubble { background: white; border: 1px solid var(--border); border-left: 3px solid var(--gold); }
-    .msg.user .bubble { background: var(--ink); color: var(--parchment); }
+    .bubble { max-width: 80%; padding: 12px; border-radius: 4px; font-size: 14px; line-height: 1.5; border: 1px solid var(--border); }
+    .msg.jury .bubble { background: white; border-left: 4px solid var(--gold); }
+    .msg.user .bubble { background: var(--ink); color: white; }
 
-    /* INPUT AREA */
-    .input-area { padding: 16px 0 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
-    textarea { flex: 1; background: white; border: 1px solid var(--border); border-radius: 3px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; resize: none; min-height: 46px; }
-    .send-btn { background: var(--ink); color: var(--gold); border: none; border-radius: 3px; width: 46px; cursor: pointer; font-size: 18px; }
-
+    .input-area { padding: 20px 0; display: flex; gap: 10px; align-items: center; }
+    textarea { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 4px; resize: none; font-family: inherit; }
+    .btn-icon { background: var(--ink); color: var(--gold); border: none; width: 46px; height: 46px; cursor: pointer; border-radius: 4px; font-size: 20px; display: flex; align-items: center; justify-content: center; }
+    .btn-mic { background: var(--gold); color: var(--ink); }
+    .btn-mic.active { background: var(--rouge); color: white; animation: pulse 1.5s infinite; }
+    
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    .paywall { text-align: center; padding: 40px; background: white; border: 1px solid var(--border); border-radius: 8px; margin-top: 20px; }
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
 <div class="hero">
-  <div class="hero-badge">Prépa IA · Elite Coach</div>
-  <h1>Votre jury<br><em>virtuel</em> vous attend.</h1>
-  <p>Simulation d'entretien · Analyse vocale · Performance pro</p>
+  <h1>Prépa <em>CRFPA</em> · Oral</h1>
+  <p style="font-size: 12px; opacity: 0.7; margin-top: 5px;">Entraînement vocal immersif</p>
 </div>
 
-<div class="auth-wrap" id="authSection">
-  <div class="auth-box">
-    <h2 id="authTitle">Se <em>connecter</em></h2>
-    <div class="field" style="margin-bottom:15px;">
-      <label style="font-size:11px; text-transform:uppercase; color:var(--muted);">Email</label>
-      <input type="email" id="authEmail" style="width:100%; padding:10px; border:1px solid var(--border);" placeholder="votre@email.com" />
-    </div>
-    <div class="field" style="margin-bottom:20px;">
-      <label style="font-size:11px; text-transform:uppercase; color:var(--muted);">Mot de passe</label>
-      <input type="password" id="authPassword" style="width:100%; padding:10px; border:1px solid var(--border);" placeholder="••••••••" />
-    </div>
-    <button class="btn-primary" style="width:100%; background:var(--ink); color:var(--gold); padding:12px; border:none; border-radius:3px; cursor:pointer;" onclick="authSubmit()">Accéder au coaching</button>
-  </div>
-</div>
-
-<div class="paywall hidden" id="paywallSection" style="max-width:780px; margin:40px auto; padding:0 20px; text-align:center;">
-  <div class="paywall-box">
-    <h2>Diagnostic 3 min terminé ! 🚀</h2>
-    <p>Vous avez un fort potentiel. Pour réussir votre entretien, débloquez le coaching complet.</p>
-    <div style="font-size:32px; color:var(--gold); margin:15px 0;">9,90€ <span style="font-size:14px; color:var(--muted);">/ mois</span></div>
-    <button class="btn-gold" style="width:100%;" onclick="location.reload()">Prendre un Pass Premium</button>
-  </div>
-</div>
-
-<div id="userBar" class="user-bar hidden">
-  <div class="user-info" style="font-size:12px; color:var(--muted);">Connecté : <strong id="userEmail">Visiteur</strong></div>
-  <div class="sims-counter">
-    <span id="simsBadge" class="sims-badge">3 min gratuites</span>
-    <button onclick="location.reload()" style="background:none; border:none; font-size:11px; color:var(--rouge); cursor:pointer; margin-left:10px;">Quitter</button>
-  </div>
-</div>
-
-<div class="app hidden" id="appSection">
-  <div class="context-bar">
-    <span class="context-label">Poste / Sujet</span>
-    <input type="text" id="subject" placeholder="Ex: Analyste financier ou Droit à l'oubli" />
-    <button class="reset-btn" style="background:none; border:1px solid var(--border); padding:5px 10px; border-radius:2px; font-size:12px; cursor:pointer;" onclick="location.reload()">↺ Reset</button>
+<div class="app" id="appSection">
+  <div class="user-bar">
+    <input type="text" id="subject" style="padding: 5px; border: 1px solid var(--border); width: 60%;" placeholder="Sujet (ex: Droit à l'oubli)">
+    <span id="simsBadge" class="sims-badge">3:00</span>
   </div>
 
   <div id="voiceMonitor" class="voice-meter hidden">
-    <span class="status-text">Débit</span>
-    <div class="meter-bar"><div id="speed-fill" style="width: 45%;"></div></div>
-    <span id="speed-label" class="status-text">STABLE</span>
+    <span style="font-size: 10px; font-weight: bold;">DÉBIT VOX</span>
+    <div class="meter-bar"><div id="speed-fill"></div></div>
   </div>
 
   <div class="chat" id="chat">
-    <div style="text-align:center; padding:40px; color:var(--muted); font-style:italic;">
-      Renseignez votre poste ou sujet, puis envoyez votre premier message pour démarrer le chrono.
-    </div>
+    <div style="text-align:center; color:gray; font-style:italic;">Cliquez sur le micro pour commencer votre plaidoirie...</div>
   </div>
 
   <div class="input-area">
-    <textarea id="userInput" placeholder="Votre réponse au jury..." onkeydown="handleKey(event)"></textarea>
-    <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
+    <button class="btn-icon btn-mic" id="micBtn" onclick="toggleMic()">🎙️</button>
+    <textarea id="userInput" placeholder="Votre réponse..." rows="1"></textarea>
+    <button class="btn-icon" onclick="sendMessage()">↑</button>
+  </div>
+</div>
+
+<div id="paywallSection" class="app hidden">
+  <div class="paywall">
+    <h2>Diagnostic terminé ⚖️</h2>
+    <p>Votre session de 3 minutes est finie. Débloquez le débriefing complet de votre prestation.</p>
+    <button style="margin-top:20px; background:var(--gold); padding:15px 30px; border:none; cursor:pointer; font-weight:bold;" onclick="location.reload()">Prendre le Pass Réussite</button>
   </div>
 </div>
 
 <script>
-  const TRIAL_LIMIT_SECONDS = 180;
   let history = [];
-  let isLoading = false;
+  let isListening = false;
   let simulationStarted = false;
-  let timerInterval;
+  const TRIAL_TIME = 180;
+  
+  // Configuration Voix (Reconnaissance)
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+  if(recognition) {
+    recognition.lang = 'fr-FR';
+    recognition.continuous = false;
+  }
 
-  // Détection du mode visiteur immédiat pour la démo
-  window.onload = () => {
-    const user = localStorage.getItem('prepaai_user');
-    if (user) {
-      document.getElementById('userEmail').textContent = JSON.parse(user).email;
+  // Configuration Voix (Synthèse)
+  const synth = window.speechSynthesis;
+
+  function toggleMic() {
+    if (!recognition) return alert("Micro non supporté");
+    if (isListening) {
+      recognition.stop();
+    } else {
+      recognition.start();
+      document.getElementById('micBtn').classList.add('active');
+      isListening = true;
     }
-    document.getElementById('authSection').classList.add('hidden');
-    document.getElementById('appSection').classList.remove('hidden');
-    document.getElementById('userBar').classList.remove('hidden');
-  };
+  }
 
-  function startTrialTimer() {
-    let timeLeft = TRIAL_LIMIT_SECONDS;
-    const badge = document.getElementById('simsBadge');
+  if(recognition) {
+    recognition.onresult = (event) => {
+      const text = event.results[0][0].transcript;
+      document.getElementById('userInput').value = text;
+      sendMessage();
+    };
+    recognition.onend = () => {
+      document.getElementById('micBtn').classList.remove('active');
+      isListening = false;
+    };
+  }
+
+  function startTimer() {
+    let timeLeft = TRIAL_TIME;
     document.getElementById('voiceMonitor').classList.remove('hidden');
-
-    timerInterval = setInterval(() => {
+    const interval = setInterval(() => {
       timeLeft--;
       let mins = Math.floor(timeLeft / 60);
       let secs = timeLeft % 60;
-      badge.textContent = `Temps restant : ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      document.getElementById('simsBadge').textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
       
-      if (timeLeft < 30) badge.style.background = "var(--rouge)";
-
+      // Simulation visuelle du débit
+      document.getElementById('speed-fill').style.width = isListening ? (Math.random() * 80 + 20) + '%' : '0%';
+      
       if (timeLeft <= 0) {
-        clearInterval(timerInterval);
+        clearInterval(interval);
         document.getElementById('appSection').classList.add('hidden');
         document.getElementById('paywallSection').classList.remove('hidden');
+        synth.cancel(); // Arrête le jury de parler
       }
-      
-      // Simulation visuelle du débit vocal
-      const randomSpeed = Math.floor(Math.random() * (70 - 30 + 1)) + 30;
-      document.getElementById('speed-fill').style.width = randomSpeed + '%';
     }, 1000);
+  }
+
+  function speak(text) {
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'fr-FR';
+    utter.rate = 1.1; 
+    utter.pitch = 0.8; // Voix de jury sérieuse
+    synth.speak(utter);
   }
 
   async function sendMessage() {
     const input = document.getElementById('userInput');
     const text = input.value.trim();
-    if (!text || isLoading) return;
+    if (!text) return;
 
-    if (!simulationStarted) {
-      startTrialTimer();
-      simulationStarted = true;
-    }
+    if (!simulationStarted) { startTimer(); simulationStarted = true; }
 
     appendMsg('user', text);
-    history.push({ role: 'user', content: text });
     input.value = '';
-    showTyping();
-
+    
     try {
       const res = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history, subject: document.getElementById('subject').value, mode: 'PRO_INTERVIEW' })
+        body: JSON.stringify({ 
+          messages: [...history, {role:'user', content:text}], 
+          subject: document.getElementById('subject').value || "Sujet non défini",
+          mode: 'PRO'
+        })
       });
       const data = await res.json();
-      removeTyping();
-      if (data.reply) {
-        history.push({ role: 'assistant', content: data.reply });
-        appendMsg('assistant', data.reply);
-      }
+      appendMsg('assistant', data.reply);
+      history.push({role:'user', content:text}, {role:'assistant', content:data.reply});
+      speak(data.reply);
     } catch(e) {
-      removeTyping();
-      appendMsg('assistant', "⚠️ Le jury a été déconnecté. Vérifiez votre API.");
+      appendMsg('assistant', "Erreur : Vérifiez votre connexion.");
     }
   }
 
   function appendMsg(role, content) {
     const chat = document.getElementById('chat');
-    if (history.length === 1) chat.innerHTML = '';
     const div = document.createElement('div');
     div.className = `msg ${role === 'assistant' ? 'jury' : 'user'}`;
-    div.innerHTML = `<div class="avatar ${role === 'assistant' ? 'jury' : 'student'}">${role === 'assistant' ? 'J' : 'E'}</div>
-                     <div class="bubble">${content}</div>`;
+    div.innerHTML = `<div class="bubble">${content}</div>`;
     chat.appendChild(div);
     chat.scrollTop = chat.scrollHeight;
   }
-
-  function showTyping() {
-    const chat = document.getElementById('chat');
-    const wrap = document.createElement('div');
-    wrap.className = 'msg jury'; wrap.id = 'typing';
-    wrap.innerHTML = `<div class="avatar jury">J</div><div class="bubble">...</div>`;
-    chat.appendChild(wrap);
-  }
-
-  function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
-  function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 </script>
 </body>
 </html>
