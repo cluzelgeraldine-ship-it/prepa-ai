@@ -196,18 +196,22 @@
 
 <script>
   const MAX_FREE = 2;
+  const MAX_GUEST = 1; // simulations sans compte
   let currentUser = null;
   let history = [];
   let isLoading = false;
   let exchangeCount = 0;
   let isRegisterMode = false;
   let simulationStarted = false;
+  let guestSimsUsed = parseInt(localStorage.getItem('prepaai_guest') || '0');
 
   // Load user from localStorage
   const saved = localStorage.getItem('prepaai_user');
   if (saved) {
     currentUser = JSON.parse(saved);
     showApp();
+  } else {
+    showGuestApp();
   }
 
   function toggleAuth() {
@@ -255,6 +259,17 @@
     const el = document.getElementById('authError');
     el.textContent = msg;
     el.classList.remove('hidden');
+  }
+
+  function showGuestApp() {
+    document.getElementById('authSection').classList.add('hidden');
+    document.getElementById('appSection').classList.remove('hidden');
+    document.getElementById('userBar').classList.remove('hidden');
+    const badge = document.getElementById('simsBadge');
+    badge.textContent = 'Invité · 1 simulation gratuite';
+    badge.className = 'sims-badge';
+    document.getElementById('userEmail').textContent = 'Visiteur';
+    initChat();
   }
 
   function showApp() {
@@ -391,21 +406,38 @@
 
     // Check freemium limit — count new simulation on first user message
     if (!simulationStarted) {
-      if (!currentUser.is_premium && (currentUser.simsToday || 0) >= MAX_FREE) {
-        document.getElementById('appSection').classList.add('hidden');
-        document.getElementById('paywallSection').classList.remove('hidden');
-        return;
+      // Guest (not logged in)
+      if (!currentUser) {
+        if (guestSimsUsed >= MAX_GUEST) {
+          // Show register wall
+          document.getElementById('appSection').classList.add('hidden');
+          document.getElementById('userBar').classList.add('hidden');
+          document.getElementById('authSection').classList.remove('hidden');
+          isRegisterMode = true;
+          document.getElementById('authTitle').innerHTML = 'Créez votre <em>compte gratuit</em>';
+          document.getElementById('authBtn').textContent = "S'inscrire";
+          document.getElementById('authSwitch').innerHTML = 'Déjà un compte ? <a onclick="toggleAuth()">Se connecter</a>';
+          showError('Créez un compte gratuit pour continuer — 2 simulations/jour !');
+          return;
+        }
+        guestSimsUsed++;
+        localStorage.setItem('prepaai_guest', guestSimsUsed);
+      } else {
+        if (!currentUser.is_premium && (currentUser.simsToday || 0) >= MAX_FREE) {
+          document.getElementById('appSection').classList.add('hidden');
+          document.getElementById('paywallSection').classList.remove('hidden');
+          return;
+        }
+        currentUser.simsToday = (currentUser.simsToday || 0) + 1;
+        localStorage.setItem('prepaai_user', JSON.stringify(currentUser));
+        updateSimsBadge();
+        fetch('/api/simulation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: currentUser.id })
+        });
       }
       simulationStarted = true;
-      currentUser.simsToday = (currentUser.simsToday || 0) + 1;
-      localStorage.setItem('prepaai_user', JSON.stringify(currentUser));
-      updateSimsBadge();
-      // Record simulation in DB
-      fetch('/api/simulation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: currentUser.id })
-      });
     }
 
     isLoading = true; btn.disabled = true;
