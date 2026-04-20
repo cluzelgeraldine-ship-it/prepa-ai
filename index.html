@@ -30,11 +30,50 @@
       display: flex; 
       flex-direction: column; 
     }
+
+    /* --- NAVIGATION & LOGO --- */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      padding: 15px 25px;
+      background: var(--ink);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      font-size: 20px;
+      background: var(--gold);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: white;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+    .logo-text span {
+      color: var(--gold);
+    }
     
-    /* Header & Hero */
+    /* --- HERO SECTION --- */
     .hero { 
       background: var(--ink); 
-      padding: 40px 20px; 
+      padding: 30px 20px 40px 20px; 
       text-align: center; 
       color: white; 
       border-bottom: 3px solid var(--gold); 
@@ -59,7 +98,7 @@
       text-transform: uppercase;
     }
     
-    /* App Container */
+    /* --- APP INTERFACE --- */
     .app { max-width: 780px; margin: 0 auto; width: 100%; padding: 20px; flex: 1; display: flex; flex-direction: column; }
     
     .user-bar { 
@@ -81,7 +120,6 @@
       border: 1px solid var(--gold); 
     }
     
-    /* Voice Meter & Animations */
     .voice-meter { 
       background: white; 
       border: 1px solid var(--border); 
@@ -95,7 +133,7 @@
     .meter-bar { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
     #speed-fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.2s; }
     
-    /* Chat System */
+    /* --- CHAT SYSTEM --- */
     .chat { 
       flex: 1; 
       overflow-y: auto; 
@@ -122,7 +160,7 @@
     }
     .msg.user .bubble { background: var(--ink); color: white; }
 
-    /* Input Controls */
+    /* --- INPUT CONTROLS --- */
     .input-area { padding: 20px 0; display: flex; gap: 12px; align-items: center; }
     textarea { 
       flex: 1; 
@@ -153,7 +191,7 @@
     
     @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     
-    /* Paywall */
+    /* --- PAYWALL --- */
     .paywall-box { 
       text-align:center; 
       padding:40px; 
@@ -167,12 +205,19 @@
     .paywall-price { background: var(--parchment); padding: 15px; border-radius: 4px; display: inline-block; margin: 20px 0; border: 1px solid var(--gold); }
     .hidden { display: none !important; }
     
-    /* Custom Scrollbar */
+    /* --- UTILS --- */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
   </style>
 </head>
 <body>
+
+<nav class="top-nav">
+  <div class="logo-container">
+    <div class="logo-icon">⚖️</div>
+    <div class="logo-text">PREPA<span>AI</span></div>
+  </div>
+</nav>
 
 <div class="hero">
   <h1>Prépa <em>CRFPA</em> · Coach Oral</h1>
@@ -228,7 +273,7 @@
   let isPremium = false;
   let TRIAL_TIME = 180; 
 
-  // Détection du succès de paiement
+  // Détection du succès de paiement (via URL ?pay=success)
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('pay') === 'success') {
     isPremium = true;
@@ -298,7 +343,7 @@
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'fr-FR'; 
     utter.rate = 1.0; 
-    utter.pitch = 0.9; // Ton un peu plus grave pour le jury
+    utter.pitch = 0.9; 
     synth.speak(utter);
   }
 
@@ -316,35 +361,6 @@
     input.value = '';
 
     try {
-      // Simulation d'appel API (À lier avec votre route Vercel /api/claude)
+      // Appel API à configurer sur votre backend
       const res = await fetch('/api/claude', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          messages: [...history, {role:'user', content:text}], 
-          subject: document.getElementById('subject').value || "Sujet Libre",
-          mode: 'CRFPA'
-        })
-      });
-      const data = await res.json();
-      appendMsg('assistant', data.reply);
-      history.push({role:'user', content:text}, {role:'assistant', content:data.reply});
-      speak(data.reply);
-    } catch(e) { 
-      const errorMsg = "Le jury analyse votre réponse... (Erreur de connexion)";
-      appendMsg('assistant', errorMsg); 
-    }
-  }
-
-  function appendMsg(role, content) {
-    const chat = document.getElementById('chat');
-    const div = document.createElement('div');
-    div.className = `msg ${role === 'assistant' ? 'jury' : 'user'}`;
-    div.innerHTML = `<div class="bubble">${content}</div>`;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-  }
-</script>
-
-</body>
-</html>
