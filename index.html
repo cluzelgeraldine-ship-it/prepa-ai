@@ -31,7 +31,7 @@
       flex-direction: column; 
     }
 
-    /* --- NAVIGATION & LOGO --- */
+    /* --- NAVIGATION --- */
     .top-nav {
       display: flex;
       align-items: center;
@@ -66,11 +66,9 @@
       letter-spacing: 1px;
     }
 
-    .logo-text span {
-      color: var(--gold);
-    }
+    .logo-text span { color: var(--gold); }
     
-    /* --- HERO SECTION --- */
+    /* --- HERO --- */
     .hero { 
       background: var(--ink); 
       padding: 30px 20px 40px 20px; 
@@ -98,7 +96,7 @@
       text-transform: uppercase;
     }
     
-    /* --- APP INTERFACE --- */
+    /* --- APP --- */
     .app { max-width: 780px; margin: 0 auto; width: 100%; padding: 20px; flex: 1; display: flex; flex-direction: column; }
     
     .user-bar { 
@@ -133,7 +131,7 @@
     .meter-bar { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
     #speed-fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.2s; }
     
-    /* --- CHAT SYSTEM --- */
+    /* --- CHAT --- */
     .chat { 
       flex: 1; 
       overflow-y: auto; 
@@ -141,6 +139,7 @@
       display: flex; 
       flex-direction: column; 
       gap: 15px; 
+      min-height: 300px;
       max-height: 450px; 
     }
     .msg { display: flex; gap: 10px; }
@@ -160,7 +159,7 @@
     }
     .msg.user .bubble { background: var(--ink); color: white; }
 
-    /* --- INPUT CONTROLS --- */
+    /* --- CONTROLS --- */
     .input-area { padding: 20px 0; display: flex; gap: 12px; align-items: center; }
     textarea { 
       flex: 1; 
@@ -170,7 +169,6 @@
       resize: none; 
       font-family: inherit; 
       font-size: 15px; 
-      background: white;
     }
     .btn-icon { 
       background: var(--ink); 
@@ -180,15 +178,11 @@
       height: 50px; 
       cursor: pointer; 
       border-radius: 50%; 
-      font-size: 20px; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      transition: all 0.3s ease;
     }
-    .btn-mic { background: var(--gold); color: var(--ink); box-shadow: 0 4px 10px rgba(201,168,76,0.3); }
     .btn-mic.active { background: var(--rouge); color: white; animation: pulse 1.5s infinite; }
-    
     @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     
     /* --- PAYWALL --- */
@@ -201,166 +195,5 @@
       box-shadow: 0 15px 40px rgba(0,0,0,0.1); 
       margin-top:20px; 
     }
-    .paywall-title { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; color: var(--ink); }
-    .paywall-price { background: var(--parchment); padding: 15px; border-radius: 4px; display: inline-block; margin: 20px 0; border: 1px solid var(--gold); }
-    .hidden { display: none !important; }
-    
-    /* --- UTILS --- */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
-  </style>
-</head>
-<body>
-
-<nav class="top-nav">
-  <div class="logo-container">
-    <div class="logo-icon">⚖️</div>
-    <div class="logo-text">PREPA<span>AI</span></div>
-  </div>
-</nav>
-
-<div class="hero">
-  <h1>Prépa <em>CRFPA</em> · Coach Oral</h1>
-  <div class="badge-ia">Simulation JURY IA</div>
-</div>
-
-<div class="app" id="appSection">
-  <div class="user-bar">
-    <input type="text" id="subject" style="padding: 10px; border: 1px solid var(--border); width: 65%; border-radius: 4px; background: white; font-weight: 500;" placeholder="Sujet d'oral (ex: Libertés fondamentales)">
-    <span id="simsBadge" class="sims-badge">3:00 MIN FREE</span>
-  </div>
-
-  <div id="voiceMonitor" class="voice-meter hidden">
-    <span style="font-size: 10px; font-weight: bold; color: var(--gold-dark); white-space: nowrap;">ANALYSE VOCALE</span>
-    <div class="meter-bar"><div id="speed-fill"></div></div>
-  </div>
-
-  <div class="chat" id="chat">
-    <div style="text-align:center; color:var(--gold-dark); font-style:italic; font-size: 13px; margin-top: 20px;">
-      Le jury attend votre introduction.<br>Cliquez sur le micro pour prendre la parole.
-    </div>
-  </div>
-
-  <div class="input-area">
-    <button class="btn-icon btn-mic" id="micBtn" onclick="toggleMic()" title="Parler">🎙️</button>
-    <textarea id="userInput" placeholder="Répondez oralement..." rows="1"></textarea>
-    <button class="btn-icon" onclick="sendMessage()" title="Envoyer">↑</button>
-  </div>
-</div>
-
-<div id="paywallSection" class="app hidden">
-  <div class="paywall-box">
-    <div class="paywall-title">Diagnostic d'Aptitude Terminé ⚖️</div>
-    <p style="color:#555; line-height: 1.6;">Votre structure de plan est enregistrée. Le <strong>Jury IA</strong> est prêt à passer à l'entretien de 20 minutes pour tester votre résistance.</p>
-    
-    <div class="paywall-price">
-      <span style="font-size:32px; font-weight:bold; color: var(--ink);">4,90€</span>
-      <span style="font-size:14px; color:var(--gold-dark); display:block;">Session complète + Débriefing sémantique</span>
-    </div>
-
-    <a href="https://buy.stripe.com/eVqfZhdIRfyOder0Ia0VO00" 
-       style="display:block; text-decoration:none; background:var(--ink); color:var(--gold); padding:18px; border-radius:4px; font-weight:bold; font-size:16px; text-transform:uppercase; letter-spacing:1px; transition: 0.3s;">
-      Débloquer mon Oral Complet
-    </a>
-    <p style="font-size:11px; color:gray; margin-top:15px;">Paiement sécurisé via Stripe · Accès immédiat</p>
-  </div>
-</div>
-
-<script>
-  let history = [];
-  let isListening = false;
-  let simulationStarted = false;
-  let isPremium = false;
-  let TRIAL_TIME = 180; 
-
-  // Détection du succès de paiement (via URL ?pay=success)
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('pay') === 'success') {
-    isPremium = true;
-    TRIAL_TIME = 1200; 
-    document.getElementById('simsBadge').textContent = "SESSION PREMIUM";
-    document.getElementById('simsBadge').style.background = "var(--gold)";
-    document.getElementById('simsBadge').style.color = "var(--ink)";
-  }
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = SpeechRecognition ? new SpeechRecognition() : null;
-  const synth = window.speechSynthesis;
-
-  if(recognition) {
-    recognition.lang = 'fr-FR';
-    recognition.continuous = false;
-    recognition.onresult = (e) => { 
-      const transcript = e.results[0][0].transcript;
-      document.getElementById('userInput').value = transcript;
-      sendMessage(); 
-    };
-    recognition.onend = () => { 
-      document.getElementById('micBtn').classList.remove('active'); 
-      isListening = false; 
-    };
-  }
-
-  function toggleMic() {
-    if (isListening) { 
-      recognition.stop(); 
-    } else { 
-      recognition.start(); 
-      document.getElementById('micBtn').classList.add('active'); 
-      isListening = true; 
-    }
-  }
-
-  function startTimer() {
-    let timeLeft = TRIAL_TIME;
-    document.getElementById('voiceMonitor').classList.remove('hidden');
-    const interval = setInterval(() => {
-      timeLeft--;
-      if (!isPremium) {
-        let mins = Math.floor(timeLeft / 60);
-        let secs = timeLeft % 60;
-        document.getElementById('simsBadge').textContent = `RESTANT : ${mins}:${secs < 10 ? '0' : ''}${secs}`;
-      }
-      
-      // Animation barre d'élocution
-      if(isListening) {
-        document.getElementById('speed-fill').style.width = (Math.random() * 60 + 40) + '%';
-      } else {
-        document.getElementById('speed-fill').style.width = '10%';
-      }
-
-      if (timeLeft <= 0 && !isPremium) {
-        clearInterval(interval);
-        document.getElementById('appSection').classList.add('hidden');
-        document.getElementById('paywallSection').classList.remove('hidden');
-        synth.cancel();
-      }
-    }, 1000);
-  }
-
-  function speak(text) {
-    if (!synth) return;
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'fr-FR'; 
-    utter.rate = 1.0; 
-    utter.pitch = 0.9; 
-    synth.speak(utter);
-  }
-
-  async function sendMessage() {
-    const input = document.getElementById('userInput');
-    const text = input.value.trim();
-    if (!text) return;
-
-    if (!simulationStarted) { 
-      startTimer(); 
-      simulationStarted = true; 
-    }
-
-    appendMsg('user', text);
-    input.value = '';
-
-    try {
-      // Appel API à configurer sur votre backend
-      const res = await fetch('/api/claude', {
-        method: 'POST',
+    .paywall-title { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; }
+    .paywall-price { background: var(--parchment); padding: 15px; border-radius: 4px; display: inline-block; margin: 20
